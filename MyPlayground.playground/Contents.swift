@@ -21,22 +21,31 @@ print("--------------------")
 print("Задача 2: Проверка скобочной последовательности")
 func isValidParentheses(_ text: String) -> String {
     var balance = 0
+
     for char in text {
         if char == "(" {
             balance += 1
         } else if char == ")" {
             balance -= 1
+        } else {
+            return "Некорректная"
         }
+
         if balance < 0 { return "Некорректная" }
     }
+    
     return balance == 0 ? "Корректная" : "Некорректная"
 }
-
-print("--------------------")
 
 print(isValidParentheses("(())")) // Корректная
 print(isValidParentheses("))((")) // Некорректная
 print(isValidParentheses("()()()")) // Корректная
+print(isValidParentheses("()a()")) // Некорректная
+print(isValidParentheses("((()))")) // Корректная
+print(isValidParentheses("((())")) // Некорректная
+print(isValidParentheses("hello")) // Некорректная
+
+print("--------------------")
 
 // Задача 3: Группировка строк по длине
 print("Задача 3: Группировка строк по длине")
@@ -126,8 +135,14 @@ struct Book {
     let genre: Genre
 }
 
+extension Book: CustomStringConvertible {
+    var description: String {
+        return "\(title) - \(author), Цена: \(price)"
+    }
+}
+
 // Класс библиотеки
-class Library {
+final class Library {
     private var books: [Book] = []
     
     func addBook(_ book: Book) {
@@ -145,8 +160,8 @@ class Library {
 
 // Класс пользователя
 class User {
-    let name: String
-    let discount: Double
+    private let name: String
+    private let discount: Double
     private var cart: [Book] = []
     
     init(name: String, discount: Double) {
@@ -163,9 +178,20 @@ class User {
         return total * (1 - discount / 100)
     }
     
-    func sortedListOfBooks(by criteria: (Book, Book) -> Bool) -> [Book] {
-        return cart.sorted(by: criteria)
+    func sortedListOfBooks(by criterion: SortingCriterion) -> [Book] {
+        switch criterion {
+        case .byTitle:
+            return cart.sorted { $0.title < $1.title }
+        case .byPrice:
+            return cart.sorted { $0.price < $1.price }
+        }
     }
+}
+
+// Перечисление для сортировки
+enum SortingCriterion {
+    case byTitle
+    case byPrice
 }
 
 // Тестирование
@@ -201,7 +227,7 @@ user.addToCart(novelBooks)
 let booksWithName = library.filterBooks(byName: "Гарри")
 user.addToCart(booksWithName)
 
-print("Итоговая корзина: \(user.sortedListOfBooks(by: { $0.title < $1.title }))")
+print("Итоговая корзина: \(user.sortedListOfBooks(by: .byTitle).map { $0.description }.joined(separator: ", "))")
 print("Цена корзины: \(user.totalPrice())")
 
 print("--------------------")
