@@ -17,22 +17,31 @@ print("--------------------")
 print("Задача 2: Проверка скобочной последовательности")
 func isValidParentheses(_ text: String) -> String {
     var balance = 0
+
     for char in text {
         if char == "(" {
             balance += 1
         } else if char == ")" {
             balance -= 1
+        } else {
+            return "Некорректная"
         }
+
         if balance < 0 { return "Некорректная" }
     }
+    
     return balance == 0 ? "Корректная" : "Некорректная"
 }
-
-print("--------------------")
 
 print(isValidParentheses("(())")) // Корректная
 print(isValidParentheses("))((")) // Некорректная
 print(isValidParentheses("()()()")) // Корректная
+print(isValidParentheses("()a()")) // Некорректная
+print(isValidParentheses("((()))")) // Корректная
+print(isValidParentheses("((())")) // Некорректная
+print(isValidParentheses("hello")) // Некорректная
+
+print("--------------------")
 
 // Задача 3: Группировка строк по длине
 print("Задача 3: Группировка строк по длине")
