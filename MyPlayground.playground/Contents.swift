@@ -20,6 +20,8 @@ print("--------------------")
 // Задача 2: Проверка скобочной последовательности
 print("Задача 2: Проверка скобочной последовательности")
 func isValidParentheses(_ text: String) -> String {
+    if text.isEmpty { return "Некорректная" }
+    
     var balance = 0
 
     for char in text {
@@ -44,6 +46,7 @@ print(isValidParentheses("()a()")) // Некорректная
 print(isValidParentheses("((()))")) // Корректная
 print(isValidParentheses("((())")) // Некорректная
 print(isValidParentheses("hello")) // Некорректная
+print(isValidParentheses("")) // Некорректная
 
 print("--------------------")
 
@@ -159,7 +162,7 @@ final class Library {
 }
 
 // Класс пользователя
-class User {
+final class User {
     private let name: String
     private let discount: Double
     private var cart: [Book] = []
@@ -174,8 +177,10 @@ class User {
     }
     
     func totalPrice() -> Double {
+        let fullPriceFactor: Double = 1  // Константа для единичной цены (полная стоимость без скидки)
+        let percentageDivider: Double = 100  // Константа для преобразования процента в десятичную дробь
         let total = cart.reduce(0) { $0 + $1.price }
-        return total * (1 - discount / 100)
+        return total * (fullPriceFactor - discount / percentageDivider)
     }
     
     func sortedListOfBooks(by criterion: SortingCriterion) -> [Book] {
@@ -227,7 +232,7 @@ user.addToCart(novelBooks)
 let booksWithName = library.filterBooks(byName: "Гарри")
 user.addToCart(booksWithName)
 
-print("Итоговая корзина: \(user.sortedListOfBooks(by: .byTitle).map { $0.description }.joined(separator: ", "))")
+print("Итоговая корзина:\n\(user.sortedListOfBooks(by: .byTitle).map { $0.description }.joined(separator: "\n"))")
 print("Цена корзины: \(user.totalPrice())")
 
 print("--------------------")
