@@ -16,6 +16,8 @@ print("--------------------")
 // Задача 2: Проверка скобочной последовательности
 print("Задача 2: Проверка скобочной последовательности")
 func isValidParentheses(_ text: String) -> String {
+    if text.isEmpty { return "Некорректная" }
+    
     var balance = 0
 
     for char in text {
@@ -40,6 +42,7 @@ print(isValidParentheses("()a()")) // Некорректная
 print(isValidParentheses("((()))")) // Корректная
 print(isValidParentheses("((())")) // Некорректная
 print(isValidParentheses("hello")) // Некорректная
+print(isValidParentheses("")) // Некорректная
 
 print("--------------------")
 
